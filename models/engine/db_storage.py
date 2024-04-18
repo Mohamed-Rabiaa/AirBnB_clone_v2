@@ -11,7 +11,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from sqlalchemy.orm.session import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 class DBStorage():
@@ -22,11 +22,13 @@ class DBStorage():
     def __init__(self):
         """ This method creates the engine of the instance """
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                               .format(getenv('HBNB_MYSQL_USER'),
-                                       getenv('HBNB_MYSQL_PWD'),
-                                       getenv('HBNB_MYSQL_HOST'),
-                                       getenv('HBNB_MYSQL_DB'),
-                                       pool_pre_ping=True))
+                                      .format(getenv('HBNB_MYSQL_USER'),
+                                              getenv('HBNB_MYSQL_PWD'),
+                                              getenv('HBNB_MYSQL_HOST'),
+                                              getenv('HBNB_MYSQL_DB'),
+                                              pool_pre_ping=True))
+        Base.metadata.create_all(self.__engine)
+
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(engine)
 
@@ -51,7 +53,8 @@ class DBStorage():
 
     def new(self, obj):
         """ add the object to the current database session """
-        self.__session.add(obj)
+        if obj:
+            self.__session.add(obj)
 
     def save(self):
         """ commit all changes of the current database session """
@@ -66,5 +69,7 @@ class DBStorage():
         """ creates all tables in the database
         and creates the current database session """
         Base.metadata.create_all(self.__engine)
-        Session = sessionmaker()
+        self.__session = sessionmaker(
+            bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(self.__session)
         self.__session = Session()

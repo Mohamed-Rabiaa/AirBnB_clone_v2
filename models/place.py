@@ -2,6 +2,7 @@
 """ Place Module for HBNB project """
 from models.base_model import BaseModel
 from sqlalchemy.orm import relationship
+# import models
 
 
 class Place(BaseModel):
@@ -18,5 +19,4 @@ class Place(BaseModel):
     longitude = 0.0
     amenity_ids = []
 
-    users = relationship("User", back_populates="places", cascade=\
-                         "delete")
+    # user = relationship("User", back_populates="places", cascade="delete")

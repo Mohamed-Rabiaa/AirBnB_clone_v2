@@ -2,6 +2,7 @@
 """ Review module for the HBNB project """
 from models.base_model import BaseModel
 from sqlalchemy.orm import relationship
+import models
 
 
 class Review(BaseModel):
@@ -10,5 +11,4 @@ class Review(BaseModel):
     user_id = ""
     text = ""
 
-    users = relationship("User", back_populates="reviews", cascade=\
-                         "delete")
+    # user = relationship("User", back_populates="reviews", cascade="delete")
