@@ -4,16 +4,18 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, Table, ForeignKey
 from sqlalchemy.orm import relationship
 import models
-from os import environ as env
-# import models
+from os import getenv
+import models
 
+'''
 place_amenity = Table(
     'place_amenity', Base.metadata,
     Column('place_id', String(60), ForeignKey("places.id")),
     Column('amenity_id', String(60), ForeignKey("amenities.id"))
 )
+'''
 
-class Place(BaseModel):
+class Place(BaseModel, Base):
     __tablename__ = "places"
     city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
@@ -25,30 +27,44 @@ class Place(BaseModel):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
+
+    user = relationship("User", back_populates="places", cascade="delete")
+    cities = relationship("City", back_populates="places",
+                          cascade="all, delete")
+
     amenity_ids = []
-    __reviews = relationship("Review", cascade="all, delete", backref="place")
-    __amenities = relationship(
+
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        reviews = relationship("Review", back_populates="place",
+                               cascade="all, delete-orphan")
+
+    else:
+        @property
+        def reviews(self):
+            """get all refiews with the current place id
+            from filestorage
+            """
+            if env.get('HBNB_TYPE_STORAGE') == 'db':
+                return self.reviews
+
+            list = [
+                v for k, v in models.storage.all(models.Review).items()
+                if v.place_id == self.id
+            ]
+            return (list)
+
+    '''
+   __amenities = relationship(
         "Amenity",
         secondary=place_amenity,
         backref="place",
         viewonly=False
     )
-    # user = relationship("User", back_populates="places", cascade="delete")
-@property
-def reviews(self):
-        """get all refiews with the current place id
-        from filestorage
-        """
-        if env.get('HBNB_TYPE_STORAGE') == 'db':
-            return self.__reviews
-        list = [
-            v for k, v in models.storage.all(models.Review).items()
-            if v.place_id == self.id
-        ]
-        return (list)
+    '''
 
-@property
-def amenities(self):
+    '''
+    @property
+    def amenities(self):
         """get all amenities with the current place id
         """
         if env.get('HBNB_TYPE_STORAGE') == 'db':
@@ -58,3 +74,4 @@ def amenities(self):
             if v.id in self.amenity_ids
         ]
         return (list)
+    '''
