@@ -15,6 +15,7 @@ place_amenity = Table(
 )
 '''
 
+
 class Place(BaseModel, Base):
     __tablename__ = "places"
     city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)

@@ -40,7 +40,6 @@ class DBStorage():
             for obj in query:
                 key = "{}.{}".format(cls.__name__, obj.id)
                 obj_dct[key] = obj
-
         else:
             cls_lst = [User, State, City, Amenity, Place, Review]
             for c in cls_lst:
