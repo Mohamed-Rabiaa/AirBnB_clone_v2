@@ -37,19 +37,18 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
 
-    user = relationship("User", back_populates="places", cascade="delete")
-    cities = relationship("City", back_populates="places",
+    # user = relationship("User", backref="places", cascade="delete")
+    cities = relationship("City", backref="places",
                           cascade="all, delete")
-
     amenity_ids = []
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        reviews = relationship("Review", back_populates="place",
+        reviews = relationship("Review", backref="place",
                                cascade="all, delete-orphan")
         amenities = relationship(
             "Amenity",
             secondary=place_amenity,
-            back_populates="place_amenities",
+            backref="place_amenities",
             viewonly=False)
 
     else:
@@ -58,9 +57,6 @@ class Place(BaseModel, Base):
             """get all refiews with the current place id
             from filestorage
             """
-            if env.get('HBNB_TYPE_STORAGE') == 'db':
-                return self.reviews
-
             list = [
                 v for k, v in models.storage.all(models.Review).items()
                 if v.place_id == self.id
