@@ -7,21 +7,22 @@ from os import getenv
 import models
 
 
-place_amenity = Table(
-    'place_amenity',
-    Base.metadata,
-    Column(
-        'place_id',
-        String(60),
-        ForeignKey("places.id"),
-        primary_key=True,
-        nullable=False),
-    Column(
-        'amenity_id',
-        String(60),
-        ForeignKey("amenities.id"),
-        primary_key=True,
-        nullable=False))
+if getenv("HBNB_TYPE_STORAGE") == "db":
+    place_amenity = Table(
+        'place_amenity',
+        Base.metadata,
+        Column(
+            'place_id',
+            String(60),
+            ForeignKey("places.id"),
+            primary_key=True,
+            nullable=False),
+        Column(
+            'amenity_id',
+            String(60),
+            ForeignKey("amenities.id"),
+            primary_key=True,
+            nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -38,8 +39,7 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
 
     # user = relationship("User", backref="places", cascade="delete")
-    cities = relationship("City", backref="places",
-                          cascade="all, delete")
+    # cities = relationship("City", backref="places", cascade="all, delete")
     amenity_ids = []
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
@@ -47,8 +47,8 @@ class Place(BaseModel, Base):
                                cascade="all, delete-orphan")
         amenities = relationship(
             "Amenity",
-            secondary=place_amenity,
-            backref="place_amenities",
+            secondary='place_amenity',
+            backref="places",
             viewonly=False)
 
     else:

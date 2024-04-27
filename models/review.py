@@ -24,5 +24,4 @@ class Review(BaseModel, Base):
         back_populates="reviews",
         cascade="all, delete")
     '''
-    place = relationship("Place", backref="reviews",
-                         cascade="all, delete")
+    # place = relationship("Place", backref="reviews", cascade="all, delete")
