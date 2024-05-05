@@ -6,7 +6,7 @@ sudo ufw allow 'Nginx HTTP'
 
 dirs_arr=("/data/" "/data/web_static/" "/data/web_static/releases/" "/data/web_static/shared/"
             "/data/web_static/releases/test/")
-for dir in "${dirs_arr[@]}"; do
+for dir in ${dirs_arr[@]}; do
     if [ ! -d "$dir" ]; then
         mkdir "$dir"
     fi
@@ -27,7 +27,8 @@ if [ -L "/data/web_static/current" ]; then
 fi
 ln -s "/data/web_static/releases/test/" "/data/web_static/current"
 sudo chown -R ubuntu:ubuntu /data/
-#echo "location /hbnb_static/ {
-#alias /data/web_static/current/; }"   >> /etc/nginx/sites-available/default
-sed -i '/listen 80 default_server;/a location /hbnb_static/ { alias /data/web_static/current/;}' /etc/nginx/sites-available/default
+
+if ! sudo grep -q "location /hbnb_static/" /etc/nginx/sites-available/default; then
+    sed -i '/listen 80 default_server;/a location /hbnb_static/ { alias /data/web_static/current/;}' /etc/nginx/sites-available/default
+fi
 service nginx restart
