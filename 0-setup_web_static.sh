@@ -6,7 +6,7 @@ sudo ufw allow 'Nginx HTTP'
 
 dirs_arr=("/data/" "/data/web_static/" "/data/web_static/releases/" "/data/web_static/shared/"
             "/data/web_static/releases/test/")
-for dir in ${dirs_arr[@]}; do
+for dir in "${dirs_arr[@]}"; do
     if [ ! -d "$dir" ]; then
         mkdir "$dir"
     fi
