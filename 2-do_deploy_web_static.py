@@ -9,13 +9,15 @@ import os
 from fabric.api import put, run, env
 
 
+env.hosts = ['52.90.0.3', '54.210.51.202']
+env.user = 'ubuntu'
+
+
 def do_deploy(archive_path):
     """ distributes an archive to your web servers """
     if not os.path.exists(archive_path):
         return False
 
-    env.hosts = ['52.90.0.3', '54.210.51.202']
-    env.user = 'ubuntu'
     result = put(archive_path, '/tmp/')
     if result.succeeded:
         file_name = archive_path.replace("versions/", "")
