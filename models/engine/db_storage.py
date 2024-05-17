@@ -11,7 +11,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker, scoped_session, Session
 
 
 class DBStorage():
@@ -75,4 +75,4 @@ class DBStorage():
 
     def close(self):
         """ Closes the session """
-        self.__session.remove()
+        Session.close(self.__session)
