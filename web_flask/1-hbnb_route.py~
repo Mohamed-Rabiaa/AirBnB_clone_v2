@@ -10,8 +10,13 @@ app = Flask(__name__)
 
 @app.route("/", strict_slashes=False)
 def home():
-    """Displays Hello HBNB! on the home page"""
+    """Displays Hello HBNB! in the home page"""
     return "Hello HBNB!"
+
+@app.route("/hbnb", strict_slashes=False)
+def hbnb():
+    """Displays HBNB in the hbnb page"""
+    return "HBNB"
 
 
 if __name__ == '__main__':
