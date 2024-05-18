@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<HTML lang="en">
+  <HEAD>
+    <TITLE>HBNB</TITLE>
+  </HEAD>
+  <BODY>
+    <H1>States</H1>
+    <UL>
+      {% for k, v in obj_dct.items %}
+      <LI>{{ k.split('.')[1] }}: <B>{{ v['name'] }}</B></LI>
+    </UL>
+  </BODY>
+</HTML>
