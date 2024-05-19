@@ -4,20 +4,20 @@
 
 from models import storage
 from models.state import State
-from models.city import City
+from models.amenity import Amenity
 from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.route('/cities_by_states', strict_slashes=False)
-def cities_by_states_list():
+@app.route('/hbnb_filters', strict_slashes=False)
+def hbnb_filters():
     """
-    Displays an HTML page that contains a list of
-    all states objects present in DBStorage sorted by name
-    and their cities
+    Displays hbnb_filters HTML page
     """
     states = storage.all(State).values()
-    return render_template('8-cities_by_states.html', states=states)
+    amenities = storage.all(Amenity).values()
+    return render_template('10-hbnb_filters.html', states=states,
+                           amenities=amenities)
 
 
 @app.teardown_appcontext

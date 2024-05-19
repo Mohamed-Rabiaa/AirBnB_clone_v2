@@ -27,7 +27,7 @@ def cities_by_state_id(id):
     if id:
         key = '{}.{}'.format('State', id)
         state = storage.all(State).get(key)
-    return render_template('9-states.html', id=id, state=state)
+    return render_template('9-states.html', state=state)
 
 
 @app.teardown_appcontext
