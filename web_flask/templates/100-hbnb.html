@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="static/styles/3-footer.css"/>
     <link rel="stylesheet" href="static/styles/6-filters.css"/>
     <link rel="stylesheet" href="static/styles/8-places.css"/>
+    <link rel="icon" href="static/images/icon.ico" />
   </head>
   <body>
     <header>
@@ -42,8 +43,8 @@
       </section>
       <section class="places">
 	<h1>Places</h1>
+	{% for place in places|sort(attribute='name') %}
 	<article>
-	  {% for place in places|sort(attribute='name') %}
 	  <div class="headline">
 	    <h2>{{ place.name }}</h2>
 	    <div class="price_by_night">{{ place.price_by_night }}</div>
@@ -71,7 +72,8 @@
 	  </div>
 	  
 	  <div class="description">{{ place.description }}</div>
-	  {% endfor %}
+	</article>
+	{% endfor %}
 	</article>
       </section>
     </div>
